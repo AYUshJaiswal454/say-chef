@@ -31,3 +31,6 @@ npm-debug.log*
 .DS_Store
 *.suo
 *.sw?
+
+# copied in by tests/rules pretest
+tests/rules/firestore.rules
