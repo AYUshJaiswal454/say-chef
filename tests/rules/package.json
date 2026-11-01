@@ -4,6 +4,7 @@
   "type": "module",
   "description": "Tests for firestore.rules, run against the Firestore emulator.",
   "scripts": {
+    "pretest": "node -e \"require('fs').copyFileSync('../../firestore.rules', 'firestore.rules')\"",
     "test": "firebase emulators:exec --only firestore --project demo-say-chef \"vitest run --config vitest.config.js\""
   },
   "devDependencies": {
