@@ -1,0 +1,491 @@
+@import 'tailwindcss';
+
+/*
+ * Say Chef design tokens.
+ * Layout: a porcelain header over a cookbook grid of enamel-rimmed plates; cooking mode
+ * fills the screen in speckled enamel blue, readable from across the kitchen.
+ * Every colour is a token with light and dark values; components only use tokens.
+ */
+
+:root {
+  --bg: #f2f4f8;
+  --surface: #ffffff;
+  --sunken: #e8ecf3;
+  --ink: #111a2f;
+  --muted: #556079;
+  --line: #d5dce8;
+  --enamel: #1e46b4;
+  --enamel-hover: #183c9e;
+  --enamel-ink: #ffffff;
+  --enamel-soft: #e2e9fb;
+  --saffron: #e09a12;
+  --saffron-soft: #fdf0d5;
+  --tomato: #c2361d;
+  --tomato-soft: #fbe4df;
+  --basil: #2b7a4b;
+  --star: #e09a12;
+  --focus: #b86e00;
+  --shadow-rgb: 17 26 47;
+  --cook-bg: #1c3fa6;
+  --cook-ink: #ffffff;
+  --cook-muted: #c9d3f5;
+  --cook-line: rgb(255 255 255 / 0.22);
+  --cook-chip: rgb(255 255 255 / 0.11);
+  --cook-accent: #f6be45;
+  --cook-accent-ink: #1a1405;
+  --cook-alarm: #ff8a70;
+  --speck-light: rgb(255 255 255 / 0.17);
+  --speck-dark: rgb(6 14 48 / 0.34);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0c111c;
+    --surface: #141b29;
+    --sunken: #0a0e17;
+    --ink: #e6eaf2;
+    --muted: #98a2b8;
+    --line: #263049;
+    --enamel: #88a5ff;
+    --enamel-hover: #a1b7ff;
+    --enamel-ink: #0a1024;
+    --enamel-soft: #1b2648;
+    --saffron: #f2b33d;
+    --saffron-soft: #3a2b0e;
+    --tomato: #ff7d66;
+    --tomato-soft: #3d1a14;
+    --basil: #5cc88a;
+    --star: #f2b33d;
+    --focus: #f2b33d;
+    --shadow-rgb: 0 0 0;
+    --cook-bg: #122a72;
+    --cook-ink: #f2f5ff;
+    --cook-muted: #b0bdeb;
+    --cook-line: rgb(255 255 255 / 0.18);
+    --cook-chip: rgb(255 255 255 / 0.08);
+    --speck-light: rgb(255 255 255 / 0.12);
+    --speck-dark: rgb(0 4 20 / 0.45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #0c111c;
+  --surface: #141b29;
+  --sunken: #0a0e17;
+  --ink: #e6eaf2;
+  --muted: #98a2b8;
+  --line: #263049;
+  --enamel: #88a5ff;
+  --enamel-hover: #a1b7ff;
+  --enamel-ink: #0a1024;
+  --enamel-soft: #1b2648;
+  --saffron: #f2b33d;
+  --saffron-soft: #3a2b0e;
+  --tomato: #ff7d66;
+  --tomato-soft: #3d1a14;
+  --basil: #5cc88a;
+  --star: #f2b33d;
+  --focus: #f2b33d;
+  --shadow-rgb: 0 0 0;
+  --cook-bg: #122a72;
+  --cook-ink: #f2f5ff;
+  --cook-muted: #b0bdeb;
+  --cook-line: rgb(255 255 255 / 0.18);
+  --cook-chip: rgb(255 255 255 / 0.08);
+  --speck-light: rgb(255 255 255 / 0.12);
+  --speck-dark: rgb(0 4 20 / 0.45);
+  color-scheme: dark;
+}
+
+@theme {
+  --font-display: 'Young Serif', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-sunken: var(--sunken);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-enamel: var(--enamel);
+  --color-enamel-ink: var(--enamel-ink);
+  --color-enamel-soft: var(--enamel-soft);
+  --color-saffron: var(--saffron);
+  --color-saffron-soft: var(--saffron-soft);
+  --color-tomato: var(--tomato);
+  --color-tomato-soft: var(--tomato-soft);
+  --color-basil: var(--basil);
+  --color-cook-ink: var(--cook-ink);
+  --color-cook-muted: var(--cook-muted);
+  --color-cook-line: var(--cook-line);
+  --color-cook-chip: var(--cook-chip);
+  --color-cook-accent: var(--cook-accent);
+  --color-cook-alarm: var(--cook-alarm);
+  --shadow-card: 0 1px 2px rgb(var(--shadow-rgb) / 0.05), 0 10px 28px -16px rgb(var(--shadow-rgb) / 0.22);
+  --shadow-lift: 0 22px 44px -22px rgb(var(--shadow-rgb) / 0.38);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+  html,
+  body {
+    background: var(--bg);
+    color: var(--ink);
+  }
+  html {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 40;
+    background: var(--surface);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  input[type='checkbox'] {
+    accent-color: var(--enamel);
+  }
+  input[type='range'] {
+    accent-color: var(--cook-accent);
+  }
+}
+
+@layer components {
+  .gutter {
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .wrap {
+    max-width: 1200px;
+    margin-inline: auto;
+  }
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .plate-art svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    padding: 0.62rem 1.1rem;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.1;
+    border: 1.5px solid transparent;
+    white-space: nowrap;
+    transition:
+      background-color 0.15s,
+      color 0.15s,
+      border-color 0.15s,
+      transform 0.08s;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+  }
+  .btn-primary {
+    background: var(--enamel);
+    color: var(--enamel-ink);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--enamel-hover);
+  }
+  .btn-quiet {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .btn-quiet:hover:not(:disabled) {
+    border-color: var(--muted);
+  }
+  .btn-danger {
+    background: var(--surface);
+    color: var(--tomato);
+    border-color: var(--line);
+  }
+  .btn-danger:hover:not(:disabled) {
+    border-color: var(--tomato);
+  }
+  .btn-destructive {
+    background: var(--tomato);
+    color: #fff;
+  }
+  .btn-lg {
+    padding: 0.95rem 1.45rem;
+    font-size: 17px;
+  }
+  .icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    transition: border-color 0.15s;
+  }
+  .icon-btn:hover {
+    border-color: var(--muted);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.42rem 0.85rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--muted);
+  }
+  .chip[aria-pressed='true'],
+  .chip[aria-checked='true'] {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+  .field {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+  .field::placeholder {
+    color: var(--muted);
+    opacity: 0.8;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--enamel);
+    box-shadow: 0 0 0 3px var(--enamel-soft);
+  }
+  textarea.field {
+    line-height: 1.55;
+    resize: vertical;
+  }
+  .field-sm {
+    padding: 0.45rem 0.7rem;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .ticket {
+    background: var(--surface);
+    border: 1.5px dashed var(--line);
+    border-radius: 14px;
+    position: relative;
+  }
+
+  /* Cooking mode */
+  .speckle {
+    background-color: var(--cook-bg);
+    background-image:
+      radial-gradient(circle, var(--speck-light) 0 1px, transparent 1.6px),
+      radial-gradient(circle, var(--speck-dark) 0 1.2px, transparent 1.9px);
+    background-size:
+      23px 19px,
+      37px 31px;
+    background-position:
+      0 0,
+      9px 13px;
+    color: var(--cook-ink);
+  }
+  .cbtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    border-radius: 999px;
+    background: var(--cook-chip);
+    color: var(--cook-ink);
+    border: 1.5px solid var(--cook-line);
+    font-weight: 600;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s;
+  }
+  .cbtn:hover:not(:disabled) {
+    border-color: var(--cook-muted);
+  }
+  .cbtn:disabled {
+    opacity: 0.45;
+  }
+  .cbtn[aria-pressed='true'] {
+    background: var(--cook-ink);
+    color: var(--cook-bg);
+    border-color: var(--cook-ink);
+  }
+  .cbtn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    border-radius: 999px;
+    background: var(--cook-accent);
+    color: var(--cook-accent-ink);
+    font-weight: 700;
+    transition:
+      filter 0.15s,
+      transform 0.08s;
+  }
+  .cbtn-primary:hover {
+    filter: brightness(1.06);
+  }
+  .cbtn:active,
+  .cbtn-primary:active {
+    transform: translateY(1px);
+  }
+  .cpanel {
+    background: var(--cook-chip);
+    border: 1.5px solid var(--cook-line);
+    border-radius: 18px;
+  }
+  .cook-field {
+    width: 100%;
+    background: rgb(0 0 0 / 0.18);
+    border: 1.5px solid var(--cook-line);
+    color: var(--cook-ink);
+    border-radius: 10px;
+    padding: 0.5rem 0.7rem;
+    font: inherit;
+  }
+  .cook-field option {
+    color: #111a2f;
+    background: #fff;
+  }
+
+  .skeleton {
+    background: linear-gradient(90deg, var(--sunken) 0, var(--line) 60px, var(--sunken) 120px) var(--sunken);
+    background-size: 400px 100%;
+    animation: shimmer 1.4s linear infinite;
+  }
+  .rise {
+    animation: rise 0.35s ease-out both;
+  }
+  .pulse-done {
+    animation: pulse-done 1.1s ease-in-out infinite;
+  }
+  .listen-dot {
+    animation: listen-dot 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200px 0;
+  }
+  to {
+    background-position: 200px 0;
+  }
+}
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes pulse-done {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 138 112 / 0.65);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgb(255 138 112 / 0);
+  }
+}
+@keyframes listen-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.6);
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

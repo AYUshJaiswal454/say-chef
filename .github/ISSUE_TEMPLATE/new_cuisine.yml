@@ -1,0 +1,32 @@
+name: New cuisine or starter recipe
+description: Propose a cuisine or a recipe to ship with Say Chef. A great first contribution.
+labels: [good first issue, content]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What are you adding?
+      options:
+        - A new cuisine
+        - A starter recipe
+        - Both
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Cuisine or recipe name
+      placeholder: Vietnamese, or Phở Gà
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: For a recipe, paste the ingredients (amount first) and steps (with times, like "simmer for 10 minutes").
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contributing
+      options:
+        - label: I'll open the pull request myself (see CONTRIBUTING.md)
