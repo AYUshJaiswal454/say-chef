@@ -11,11 +11,28 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-1E46B4.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-F6BE45.svg)](CONTRIBUTING.md)
 
-[**Live demo**](https://say-chef.onrender.com) · [Set up Firebase](docs/FIREBASE_SETUP.md) · [Voice commands](docs/VOICE_COMMANDS.md) · [Contribute](CONTRIBUTING.md)
+### [Open the live app → say-chef.onrender.com](https://say-chef.onrender.com)
+
+[Live app](https://say-chef.onrender.com) · [GitHub Pages mirror](https://ayushjaiswal454.github.io/say-chef/) · [Set up Firebase](docs/FIREBASE_SETUP.md) · [Voice commands](docs/VOICE_COMMANDS.md) · [Contribute](CONTRIBUTING.md)
 
 <img src="docs/screenshots/browse.png" alt="Say Chef home page: a grid of recipe cards with plate illustrations, search, filters and an example voice conversation" width="100%" />
 
 </div>
+
+## Links
+
+| | |
+| --- | --- |
+| **Live app (Render)** | https://say-chef.onrender.com |
+| **Mirror (GitHub Pages)** | https://ayushjaiswal454.github.io/say-chef/ |
+| **Try cooking mode** | [Dal Tadka, hands-free](https://say-chef.onrender.com/recipes/dal-tadka/cook) · [Masala Chai](https://say-chef.onrender.com/recipes/masala-chai/cook) · [Shakshuka](https://say-chef.onrender.com/recipes/shakshuka/cook) |
+| **Source code** | https://github.com/AYUshJaiswal454/say-chef |
+| **CI runs** | https://github.com/AYUshJaiswal454/say-chef/actions |
+| **Deploy your own** | [Deploy to Render](https://render.com/deploy?repo=https://github.com/AYUshJaiswal454/say-chef) · [Fork on GitHub](https://github.com/AYUshJaiswal454/say-chef/fork) |
+| **Report a bug or idea** | https://github.com/AYUshJaiswal454/say-chef/issues/new/choose |
+| **Docs** | [Firebase setup](docs/FIREBASE_SETUP.md) · [Voice commands](docs/VOICE_COMMANDS.md) · [Architecture](docs/ARCHITECTURE.md) · [Roadmap](docs/ROADMAP.md) |
+| **Community** | [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Security policy](SECURITY.md) · [MIT license](LICENSE) |
+| **Original project idea** | [200 Project Ideas, #29: Recipe Sharing App with Voice Recognition](https://dev.to/kishansheth/200-project-ideas-from-beginner-to-advanced-with-open-source-contributions-3g6a#27) |
 
 ## Why
 
