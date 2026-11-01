@@ -59,6 +59,7 @@ Click **Sign in**, then **Add 12 starter recipes** on the empty cookbook. Open t
 Google sign-in only works on domains Firebase knows about. `localhost` is allowed by default. When you deploy, add your site's domain in **Authentication** → **Settings** → **Authorised domains**, for example:
 
 - `your-name.github.io` for GitHub Pages
+- `say-chef.onrender.com` (or whatever address Render gives your site) for Render
 - `your-project.web.app` is added automatically for Firebase Hosting
 
 If you see "This site is not on the Firebase project's list of authorised domains yet", this is the step to check.
