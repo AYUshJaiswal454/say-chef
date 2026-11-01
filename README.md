@@ -11,7 +11,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-1E46B4.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-F6BE45.svg)](CONTRIBUTING.md)
 
-[**Live demo**](https://ayushjaiswal454.github.io/say-chef/) · [Set up Firebase](docs/FIREBASE_SETUP.md) · [Voice commands](docs/VOICE_COMMANDS.md) · [Contribute](CONTRIBUTING.md)
+[**Live demo**](https://say-chef.onrender.com) · [Set up Firebase](docs/FIREBASE_SETUP.md) · [Voice commands](docs/VOICE_COMMANDS.md) · [Contribute](CONTRIBUTING.md)
 
 <img src="docs/screenshots/browse.png" alt="Say Chef home page: a grid of recipe cards with plate illustrations, search, filters and an example voice conversation" width="100%" />
 
