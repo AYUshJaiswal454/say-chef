@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Say Chef</title>
+    <meta
+      name="description"
+      content="A recipe sharing app you can cook from hands-free: it reads steps aloud, listens for voice commands and turns cooking times into timers."
+    />
+    <meta name="theme-color" content="#1E46B4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta property="og:title" content="Say Chef" />
+    <meta property="og:description" content="Share recipes and cook them hands-free with voice commands and automatic timers." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Figtree:wght@400;500;600;700&family=Young+Serif&display=swap"
+    />
+    <script>
+      // Apply a saved light/dark choice before first paint.
+      try {
+        var theme = localStorage.getItem('saychef.theme');
+        if (theme === '"light"' || theme === '"dark"') document.documentElement.dataset.theme = JSON.parse(theme);
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>Say Chef needs JavaScript to read recipes aloud and run timers.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

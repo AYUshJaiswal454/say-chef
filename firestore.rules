@@ -1,0 +1,157 @@
+rules_version = '2';
+
+// Say Chef security rules.
+//
+//   recipes/{recipeId}                    anyone reads; signed-in cooks create; only the author edits or deletes
+//   recipes/{recipeId}/reviews/{authorId} anyone reads; each cook writes only their own review
+//   users/{uid}/favorites/{recipeId}      private to that cook
+//
+// A review write must update the recipe's ratingSum / ratingCount in the same
+// transaction, and the totals must match the change. Limits mirror src/lib/recipe/validate.ts.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isText(value, max) {
+      return value is string && value.size() <= max;
+    }
+
+    function isLines(value, min, max) {
+      return value is list && value.size() >= min && value.size() <= max;
+    }
+
+    function isMinutes(value, max) {
+      return value is int && value >= 0 && value <= max;
+    }
+
+    function validRecipe(d) {
+      return d.keys().hasOnly([
+          'title', 'description', 'cuisine', 'difficulty', 'prepMinutes', 'cookMinutes', 'servings',
+          'diet', 'ingredients', 'steps', 'notes', 'plate',
+          'authorId', 'authorName', 'authorPhoto', 'createdAt', 'updatedAt', 'ratingCount', 'ratingSum', 'starter'
+        ])
+        && d.keys().hasAll([
+          'title', 'cuisine', 'difficulty', 'prepMinutes', 'cookMinutes', 'servings',
+          'ingredients', 'steps', 'authorId', 'createdAt', 'updatedAt', 'ratingCount', 'ratingSum'
+        ])
+        && d.title is string && d.title.size() >= 1 && d.title.size() <= 120
+        && isText(d.get('description', ''), 600)
+        && isText(d.cuisine, 40)
+        && d.difficulty in ['Easy', 'Medium', 'Hard']
+        && isMinutes(d.prepMinutes, 1440)
+        && isMinutes(d.cookMinutes, 2880)
+        && d.servings is int && d.servings >= 1 && d.servings <= 50
+        && isLines(d.get('diet', []), 0, 5)
+        && isLines(d.ingredients, 1, 80)
+        && isLines(d.steps, 1, 60)
+        && isText(d.get('notes', ''), 1500)
+        && isText(d.get('plate', ''), 20)
+        && isText(d.get('authorName', ''), 80)
+        && (d.get('authorPhoto', null) == null || isText(d.authorPhoto, 2000))
+        && d.get('starter', false) is bool;
+    }
+
+    function validReview(d, uid) {
+      return d.keys().hasOnly(['authorId', 'authorName', 'authorPhoto', 'rating', 'text', 'createdAt', 'updatedAt'])
+        && d.authorId == uid
+        && d.rating is int && d.rating >= 1 && d.rating <= 5
+        && isText(d.get('text', ''), 1000)
+        && isText(d.get('authorName', ''), 80)
+        && (d.get('authorPhoto', null) == null || isText(d.authorPhoto, 2000))
+        && d.updatedAt == request.time;
+    }
+
+    function recipePath(recipeId) {
+      return /databases/$(database)/documents/recipes/$(recipeId);
+    }
+
+    function reviewPath(recipeId, uid) {
+      return /databases/$(database)/documents/recipes/$(recipeId)/reviews/$(uid);
+    }
+
+    // The rating a cook had before this request, and will have after it (0 = no review).
+    function ratingBefore(recipeId, uid) {
+      return exists(reviewPath(recipeId, uid)) ? get(reviewPath(recipeId, uid)).data.rating : 0;
+    }
+
+    function ratingAfter(recipeId, uid) {
+      return existsAfter(reviewPath(recipeId, uid)) ? getAfter(reviewPath(recipeId, uid)).data.rating : 0;
+    }
+
+    // The recipe's totals change by exactly this cook's review change.
+    function totalsMatch(recipeId, uid) {
+      let before = get(recipePath(recipeId)).data;
+      let after = getAfter(recipePath(recipeId)).data;
+      let oldRating = ratingBefore(recipeId, uid);
+      let newRating = ratingAfter(recipeId, uid);
+      return after.ratingSum == before.ratingSum + newRating - oldRating
+        && after.ratingCount == before.ratingCount
+          + (newRating > 0 ? 1 : 0) - (oldRating > 0 ? 1 : 0);
+    }
+
+    match /recipes/{recipeId} {
+      allow read: if true;
+
+      allow create: if signedIn()
+        && validRecipe(request.resource.data)
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.ratingCount == 0
+        && request.resource.data.ratingSum == 0
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+
+      // The author edits the recipe itself, never its authorship or ratings.
+      allow update: if signedIn()
+        && resource.data.authorId == request.auth.uid
+        && validRecipe(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title', 'description', 'cuisine', 'difficulty', 'prepMinutes', 'cookMinutes', 'servings',
+          'diet', 'ingredients', 'steps', 'notes', 'plate', 'authorName', 'authorPhoto', 'updatedAt'
+        ])
+        && request.resource.data.updatedAt == request.time;
+
+      // Anyone else may only move the rating totals, and only alongside their own review.
+      allow update: if signedIn()
+        && resource.data.authorId != request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ratingSum', 'ratingCount'])
+        && totalsMatch(recipeId, request.auth.uid);
+
+      allow delete: if signedIn() && resource.data.authorId == request.auth.uid;
+
+      match /reviews/{uid} {
+        allow read: if true;
+
+        allow create: if signedIn()
+          && request.auth.uid == uid
+          && validReview(request.resource.data, uid)
+          && request.resource.data.createdAt == request.time
+          && exists(recipePath(recipeId))
+          && get(recipePath(recipeId)).data.authorId != uid
+          && totalsMatch(recipeId, uid);
+
+        allow update: if signedIn()
+          && request.auth.uid == uid
+          && validReview(request.resource.data, uid)
+          && request.resource.data.createdAt == resource.data.createdAt
+          && exists(recipePath(recipeId))
+          && totalsMatch(recipeId, uid);
+
+        // If the recipe is already gone there are no totals left to keep in step.
+        allow delete: if signedIn()
+          && request.auth.uid == uid
+          && (!exists(recipePath(recipeId)) || totalsMatch(recipeId, uid));
+      }
+    }
+
+    match /users/{uid}/favorites/{recipeId} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['savedAt']);
+    }
+  }
+}

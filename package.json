@@ -1,0 +1,61 @@
+{
+  "name": "say-chef",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A recipe sharing app you can cook from hands-free: it reads steps aloud, listens for voice commands and turns cooking times into timers.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AYUshJaiswal454/say-chef.git"
+  },
+  "homepage": "https://ayushjaiswal454.github.io/say-chef/",
+  "keywords": [
+    "recipes",
+    "voice-recognition",
+    "web-speech-api",
+    "react",
+    "firebase",
+    "tailwindcss",
+    "hands-free",
+    "cooking"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  },
+  "dependencies": {
+    "firebase": "^12.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/node": "^22.16.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.11",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.38.0",
+    "vite": "^7.1.0",
+    "vitest": "^3.2.4"
+  }
+}
