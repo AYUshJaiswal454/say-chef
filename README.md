@@ -148,6 +148,10 @@ Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the pieces fit togethe
 
 **GitHub Pages** (already set up): every push to `main` builds and deploys through [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). To deploy with Firebase, add your config as repository variables named like the keys in `.env.example` (Settings → Secrets and variables → Actions → Variables). Without them the site runs in demo mode.
 
+**Render** (free static site): click the button below, or in the Render dashboard choose **New → Blueprint** and pick your fork. [`render.yaml`](render.yaml) sets the build, the publish folder and the rewrite that makes deep links work. To use Firebase, add the `VITE_FIREBASE_*` variables under the service's **Environment** tab and redeploy.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/AYUshJaiswal454/say-chef)
+
 **Firebase Hosting**: `npm run build && npx firebase-tools deploy`. `firebase.json` already rewrites every path to `index.html`.
 
 Any static host works, as long as unknown paths serve `index.html`.

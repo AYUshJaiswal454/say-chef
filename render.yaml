@@ -1,0 +1,29 @@
+# Render Blueprint: deploys Say Chef as a free static site.
+# In the Render dashboard choose New > Blueprint and pick this repository,
+# or use the "Deploy to Render" button in the README.
+# To share recipes through Firebase, add the VITE_FIREBASE_* variables from
+# .env.example under the service's Environment tab and redeploy.
+services:
+  - type: web
+    runtime: static
+    name: say-chef
+    buildCommand: npm install --no-audit --no-fund && npm run build
+    staticPublishPath: ./dist
+    buildFilter:
+      ignoredPaths:
+        - docs/**
+        - tests/**
+        - '**/*.md'
+        - .github/**
+    # Every app path (/recipes/dal-tadka, /new…) is served by the single-page app.
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
